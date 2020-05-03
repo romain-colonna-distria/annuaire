@@ -2,53 +2,37 @@
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<c:url var="css" value="/style.css" />
 
 <html>
 <head>
     <meta charset="UTF-8"/>
     <title>Groupes</title>
-    <link rel="stylesheet" href="${css}">
     <%@ include file="/WEB-INF/jsp/utils/head-bootstrap.jsp"%>
 </head>
 <body>
 <div class="container">
-    <c:if test="${user == null || !user.connected}">
-        <form class="form-inline" method="post" action="<c:url value = "/utilisateur/connexion"/>">
-            <div class="form-group mb-2">
-                <input type="email" name="email" class="form-control" placeholder="exemple@exemple.com" />
-            </div>
-            <div class="form-group mb-2">
-                <input type="password" name="password" class="form-control" placeholder="************" />
-            </div>
-            <button type="submit" class="btn btn-primary mb-2">Se connecter</button>
-        </form>
-        <c:if test="${user != null && user.badPassword}">
-            <div class="alert alert-danger" role="alert">
-                Email ou mot de passe incorrect.
-            </div>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="<c:url value = "/groupe/liste"/>">Liste groupes</a>
+        <a class="navbar-brand" aria-disabled="true" href="#">Liste personnes</a>
+        <c:if test="${user == null || !user.connected}">
+            <form class="form-inline" method="post" action="<c:url value = "/utilisateur/connexion"/>">
+                <input type="email" name="email" class="orm-control mr-sm-2" placeholder="exemple@exemple.com" aria-label="Search"/>
+                <input type="password" name="password" class="orm-control mr-sm-2" placeholder="************" aria-label="Search"/>
+                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Se connecter</button>
+            </form>
         </c:if>
-    </c:if>
-    <c:if test="${user != null && user.connected}">
-        <div class="alignLeft">
-            <form method="post" action="<c:url value = "/utilisateur/profile"/>">
-                <button type="submit" class="btn btn-primary mx-sm-3 mb-2">Mon profile</button>
-            </form>
-        </div>
-        <div>
-            <form method="post" action="<c:url value = "/utilisateur/deconnexion"/>">
-                <button type="submit" class="btn btn-primary mx-sm-3 mb-2">Se deconnecter</button>
-            </form>
+        <c:if test="${user != null && user.connected}">
+            <a class="navbar-brand" href="<c:url value = "/utilisateur/profile"/>">Mon profile</a>
+            <a class="navbar-brand" href="<c:url value = "/utilisateur/deconnexion"/>">Se deconnecter</a>
+        </c:if>
+    </nav>
+    <c:if test="${user != null && user.badPassword}">
+        <div class="alert alert-danger" role="alert">
+            Email ou mot de passe incorrect.
         </div>
     </c:if>
-    <div class="alignRight">
-        <form method="post" action="<c:url value = "/groupe/liste"/>">
-            <button type="submit" class="btn btn-primary mx-sm-3 mb-2">Liste des groupes</button>
-        </form>
-    </div>
 
     <h1 class="title" align="center">Liste des personnes</h1>
-
     <form class="form-inline" method="get" action="<c:url value = "/personne/liste"/>">
         <div class="form-group mb-2">
             <input type="text" name="prenom" class="form-control" placeholder="Prenom" />

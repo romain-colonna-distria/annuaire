@@ -3,6 +3,8 @@ package annuaire.services;
 import annuaire.Starter;
 import annuaire.model.ClassGroup;
 import annuaire.model.Person;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +23,37 @@ public class ClassGroupDAOTest {
     IClassGroupDAO daoG;
 
 
-    static ClassGroup notInitClassGroup;
-    static ClassGroup withoutNameClassGroup;
+    ClassGroup notInitClassGroup;
+    ClassGroup withoutNameClassGroup;
+    ClassGroup classGroupWithEmptyName;
+
+    @BeforeEach
+    public void setup(){
+        withoutNameClassGroup = new ClassGroup();
+
+        classGroupWithEmptyName = new ClassGroup();
+        classGroupWithEmptyName.setName("");
+    }
+
+    @AfterEach
+    public void tearDown() {
+        daoG.deleteAll();
+    }
 
     @Test
     public void testSaveNotInitClassGroup() {
         assertThrows(InvalidDataAccessApiUsageException.class, () -> {
             daoG.save(notInitClassGroup);
         });
+    }
+
+    @Test
+    public void testSaveClassGroupWithEmptyName() {
+        /*
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            daoG.save(classGroupWithEmptyName);
+        });
+        */
     }
 
     @Test

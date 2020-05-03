@@ -16,7 +16,7 @@ public class Utils {
             p.setFirstName("Prenom" + i);
             p.setLastName("Nom" + i);
             p.setEmail(i + "@" + i + ".fr");
-            p.setWebsite("site" + i + ".com");
+            p.setWebsite("site" + i + ".fr");
             p.setBirthday(new Date());
             p.setPassword("pass" + i);
 

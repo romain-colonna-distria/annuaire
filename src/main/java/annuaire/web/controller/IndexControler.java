@@ -26,28 +26,12 @@ public class IndexControler {
 
 	@PostConstruct
 	public void init() {
-		Person p1 = new Person();
-		p1.setFirstName("Romain");
-		p1.setLastName("COLONNA");
-		p1.setEmail("romain@gmail.com");
-		p1.setWebsite("romain.com");
-		p1.setBirthday(new Date());
-		p1.setPassword("coucou");
-
-
-		ClassGroup c = new ClassGroup();
-		c.setName("M1 ILD 2018/2019");
-		c.addPerson(p1);
-
-		manager.saveGroup(c);
-		manager.savePerson(p1);
-
 		List<Person> persons = Utils.generatePersons(10000);
-		List<ClassGroup> groups = Utils.generateGroups(10);
+		List<ClassGroup> groups = Utils.generateGroups(700);
 
 		for(Person p : persons){
 			Random rand = new Random();
-			int r = rand.nextInt(10);
+			int r = rand.nextInt(groups.size());
 
 			groups.get(r).addPerson(p);
 		}

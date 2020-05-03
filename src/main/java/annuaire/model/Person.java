@@ -2,6 +2,8 @@ package annuaire.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -88,6 +90,11 @@ public class Person {
 
     public Date getBirthday() {
         return birthday;
+    }
+
+    public String getBirthdayString(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(birthday);
     }
 
     public void setBirthday(Date birthday) {

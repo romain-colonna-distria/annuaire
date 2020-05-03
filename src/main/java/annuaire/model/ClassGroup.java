@@ -14,7 +14,7 @@ public class ClassGroup {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "name", length = 100, unique = true)
+    @Column(name = "name", length = 100, unique = true, nullable = false)
     private String name;
 
 

@@ -39,7 +39,7 @@ public class PersonDAOTestFind {
         p1 = new Person();
         p1.setFirstName("Rom1");
         p1.setLastName("COLONN1");
-        p1.setEmail("colonna.distria.r@gmail.com");
+        p1.setEmail("colonna.r@gmail.com");
         p1.setWebsite("romain.com");
         p1.setBirthday(new Date());
         p1.setPassword("pass");

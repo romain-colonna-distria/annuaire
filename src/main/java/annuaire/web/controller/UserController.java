@@ -1,24 +1,24 @@
 package annuaire.web.controller;
 
-import annuaire.model.Person;
+
 import annuaire.model.User;
 
 import annuaire.web.IDirectoryManager;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 @Controller()
 @RequestMapping("/utilisateur")
@@ -72,7 +72,7 @@ public class UserController {
         User user = (User) session.getAttribute("user");
 
         ModelAndView mv = new ModelAndView("profil");
-        mv.addObject("person", user.getPerson());
+        mv.addObject("user", user);
 
         return mv;
     }
@@ -102,10 +102,22 @@ public class UserController {
                 user.getPerson().setEmail(email);
         }
         if(!website.equals("")) {
-            user.getPerson().setWebsite(website);
+            try {
+                URL url = new URL(website);
+                user.getPerson().setWebsite(website);
+            } catch (MalformedURLException e) {
+                System.err.println("Mauvaise url.");
+            }
+
         }
         if(!birthday.equals("")) {
-            //user.getPerson().setBirthday(birthday);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date parsed = format.parse(birthday);
+                user.getPerson().setBirthday(parsed);
+            } catch (ParseException e) {
+                System.err.println("Mauvaise date de naissance.");
+            }
         }
         if(!password.equals("")) {
             user.getPerson().setPassword(password);

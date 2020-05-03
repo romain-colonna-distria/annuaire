@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 
-<c:url var="css" value="/style.css" />
-
 <html>
     <head>
         <meta charset="UTF-8"/>
         <title>Groupes</title>
-        <link rel="stylesheet" href="${css}">
         <%@ include file="/WEB-INF/jsp/utils/head-bootstrap.jsp"%>
     </head>
     <body>
         <div class="container">
-            <form method="post" action="<c:url value = "/groupe/liste"/>">
-                <button type="submit" class="btn btn-primary mx-sm-3 mb-2">Retour liste des groupes</button>
-            </form>
+            <nav class="navbar navbar-light bg-light justify-content-between">
+                <a class="navbar-brand" href="<c:url value = "/groupe/liste"/>">Liste groupes</a>
+                <a class="navbar-brand" href="<c:url value = "/personne/liste"/>">Liste personnes</a>
+                <c:if test="${user == null || !user.connected}">
+                    <form class="form-inline" method="post" action="<c:url value = "/utilisateur/connexion"/>">
+                        <input type="email" name="email" class="orm-control mr-sm-2" placeholder="exemple@exemple.com" aria-label="Search"/>
+                        <input type="password" name="password" class="orm-control mr-sm-2" placeholder="************" aria-label="Search"/>
+                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Se connecter</button>
+                    </form>
+                </c:if>
+                <c:if test="${user != null && user.connected}">
+                    <a class="navbar-brand" href="<c:url value = "/utilisateur/profile"/>">Mon profile</a>
+                    <a class="navbar-brand" href="<c:url value = "/utilisateur/deconnexion"/>">Se deconnecter</a>
+                </c:if>
+            </nav>
 
             <h1 align="center" class="title">Details du groupe "${group.name}"</h1>
+
             <form class="form-inline" method="get" action="<c:url value = "/personne/liste"/>">
                 <div class="form-group mb-2">
                     <input type="text" name="prenom" class="form-control" placeholder="Prenom" />
