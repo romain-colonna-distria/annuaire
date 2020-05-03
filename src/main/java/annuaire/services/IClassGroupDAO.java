@@ -4,14 +4,17 @@ package annuaire.services;
 import annuaire.model.ClassGroup;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface IClassGroupDAO extends CrudRepository<ClassGroup, Long> {
-    // lire un groupe
+    // Récupérer depuis l'id
     ClassGroup findById(long id);
 
+    // Récupérer depuis le nom
+    List<ClassGroup> findByNameContains(String name);
+
     // récupérer les groupes
-    Collection<ClassGroup> findAll();
+    List<ClassGroup> findAll();
 
     // ajoute le groupe en base de données
     ClassGroup save(ClassGroup c);

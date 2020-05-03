@@ -1,25 +1,28 @@
+package annuaire.services;
 
+import annuaire.Starter;
 import annuaire.model.ClassGroup;
 import annuaire.model.Person;
-import annuaire.services.IClassGroupDAO;
-import annuaire.services.IPersonDAO;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.PersistenceException;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = SpringConfiguration.class)
-public class PersonDAOTest {
+@ContextConfiguration(classes = Starter.class)
+public class PersonDAOTestSave {
 
     @Autowired
     IPersonDAO daoP;
@@ -39,7 +42,7 @@ public class PersonDAOTest {
     static Person withoutClassGroupPerson;
     static Person goodPerson;
 
-    /* ************************************ SETUP ************************************ *
+    /* ************************************ SETUP ************************************ */
     @BeforeAll
     public static void init(){
         withoutFirstNamePerson = new Person();
@@ -100,6 +103,7 @@ public class PersonDAOTest {
         goodPerson.setBirthday(new Date());
         goodPerson.setPassword("pass");
     }
+
     @BeforeEach
     public void setup(){
         classGroup = new ClassGroup();
@@ -121,182 +125,75 @@ public class PersonDAOTest {
         daoP.deleteAll();
         daoG.deleteAll();
     }
-
     /* ******************************************************************************* */
 
 
 
 
-    /* ************************************ TEST ************************************* *
-
+    /* ********************************** TEST SAVE ********************************** */
     @Test
-    public void testAddNotInitPerson() {
-        assertThrows(IllegalArgumentException.class, () -> {
+    public void testSaveNotInitPerson() {
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> {
             daoP.save(notInitPerson);
         });
     }
 
     @Test
-    public void testAddPersonwWithoutFirstName() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonwWithoutFirstName() {
+        assertThrows(DataIntegrityViolationException.class, () -> {
             daoP.save(withoutFirstNamePerson);
         });
     }
 
     @Test
-    public void testAddPersonWithoutLastName() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonWithoutLastName() {
+        assertThrows(DataIntegrityViolationException.class, () -> {
             daoP.save(withoutLastNamePerson);
         });
     }
 
     @Test
-    public void testAddPersonWithoutEMail() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonWithoutEMail() {
+        assertThrows(DataIntegrityViolationException.class, () -> {
             daoP.save(withoutEMailPerson);
         });
     }
 
     @Test
-    public void testAddPersonWithoutWebsite() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonWithoutWebsite() {
+        assertThrows(DataIntegrityViolationException.class, () -> {
             daoP.save(withoutWebsitePerson);
         });
     }
 
     @Test
-    public void testAddPersonWithoutBirthday() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonWithoutBirthday() {
+        assertThrows(DataIntegrityViolationException.class, () -> {
             daoP.save(withoutBirthdayPerson);
         });
     }
 
     @Test
-    public void testAddPersonWithoutPassword() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonWithoutPassword() {
+        assertThrows(DataIntegrityViolationException.class, () -> {
             daoP.save(withoutPasswordPerson);
         });
     }
 
     @Test
-    public void testAddPersonWithoutClassGroup() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testSavePersonWithoutClassGroup() {
+        assertDoesNotThrow(() -> {
             daoP.save(withoutClassGroupPerson);
         });
     }
 
     @Test
-    public void testAddGoodPersonNoException() {
+    public void testSaveGoodPersonNoException() {
         Person pInitial = new Person(goodPerson);
 
         assertDoesNotThrow(() -> {
             daoP.save(pInitial);
         });
     }
-
-
-
-
-
-
-    @Test
-    public void testFindPerson(){
-        Person pInitial = new Person(goodPerson);
-        daoP.save(pInitial);
-
-        Person p = daoP.findById(pInitial.getId());
-
-        assertEquals(pInitial, p);
-    }
-
-
-
-/*
-    @Test
-    public void testUpdateFirstNamePerson(){
-        String newName = "other";
-        Person pInitial = new Person(goodPerson);
-
-        daoP.save(pInitial);
-        pInitial.setFirstName(newName);
-        daoP.updatePerson(pInitial);
-
-        Person p = daoP.findPerson(pInitial.getId());
-
-        assertEquals(p.getFirstName(), newName);
-    }
-
-    @Test
-    public void testUpdateLastNamePerson(){
-        String newName = "other";
-        Person pInitial = new Person(goodPerson);
-
-        daoP.addPerson(pInitial);
-        pInitial.setLastName(newName);
-        daoP.updatePerson(pInitial);
-
-        Person p = daoP.findPerson(pInitial.getId());
-
-        assertEquals(p.getLastName(), newName);
-    }
-
-    @Test
-    public void testUpdateEMailPerson(){
-        String newEMail = "other@other.oth";
-        Person pInitial = new Person(goodPerson);
-
-        daoP.addPerson(pInitial);
-        pInitial.setEmail(newEMail);
-        daoP.updatePerson(pInitial);
-
-        Person p = daoP.findPerson(pInitial.getId());
-
-        assertEquals(p.getEmail(), newEMail);
-    }
-
-    @Test
-    public void testUpdateWebsitePerson(){
-        String newWebsite = "other.oth";
-        Person pInitial = new Person(goodPerson);
-
-        daoP.addPerson(pInitial);
-        pInitial.setWebsite(newWebsite);
-        daoP.updatePerson(pInitial);
-
-        Person p = daoP.findPerson(pInitial.getId());
-
-        assertEquals(p.getWebsite(), newWebsite);
-    }
-
-    @Test
-    public void testUpdateBirthdayPerson(){
-        Date newBirthday = new Date();
-
-        daoP.addPerson(goodPerson);
-        Date oldBirthday = daoP.findPerson(goodPerson.getId()).getBirthday();
-
-        goodPerson.setBirthday(newBirthday);
-        daoP.updatePerson(goodPerson);
-
-        Person p = daoP.findPerson(goodPerson.getId());
-
-        assertEquals(p.getBirthday(), oldBirthday);
-    }
-
-    @Test
-    public void testUpdatePasswordPerson(){
-        String newPass = "other";
-        Person pInitial = new Person(goodPerson);
-
-        daoP.addPerson(pInitial);
-        pInitial.setPassword(newPass);
-        daoP.updatePerson(pInitial);
-
-        Person p = daoP.findPerson(pInitial.getId());
-
-        assertEquals(p.getPassword(), newPass);
-    }
-    */
-
     /* ******************************************************************************* */
 }

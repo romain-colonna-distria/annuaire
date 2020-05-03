@@ -18,10 +18,10 @@ public class Person {
     @Column(name = "last_name", length = 100, nullable = false)
     private String lastName;
 
-    @Column(name = "email", length = 254, nullable = false)
+    @Column(name = "email", length = 254, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "website", length = 250, nullable = true)
+    @Column(name = "website", length = 250, nullable = false)
     private String website;
 
     @Column(name = "birthday", nullable = false)
@@ -31,7 +31,7 @@ public class Person {
     @Column(name = "password", length = 50, nullable = false)
     private String password;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "classGroup")
     private ClassGroup classGroup;
 
